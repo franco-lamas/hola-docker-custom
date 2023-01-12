@@ -56,13 +56,6 @@ jobs:
             cd frontend
             composer update
             composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-        - name: Generate key
-          run: | 
-            php artisan key:generate
-        - name: Change Directory Permissions
-          run: |
-            cd frontend
-            chmod -R 777 storage bootstrap/cache
         - name: Clear Config
           run: |
             cd frontend
