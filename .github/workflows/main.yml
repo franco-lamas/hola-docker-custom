@@ -14,11 +14,12 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v2
-        - run: cd frontend
+        
         - name: Node.js Setup
           uses: actions/setup-node@v2
           with:
             node-version: 16.x
+        - run: cd frontend
         - name: Cache node_modules directory
           uses: actions/cache@v2
           id: node_modules-cache
