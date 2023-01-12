@@ -55,12 +55,7 @@ jobs:
           run: |
             cd frontend
             composer update
-            composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-        - name: Clear Config
-          run: |
-            cd frontend
-            php artisan config:clear
-        
+            composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist        
 
     ci-backend:
       runs-on: ubuntu-latest
