@@ -57,13 +57,20 @@ jobs:
             composer update
             composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
         - name: Generate key
-          run: php artisan key:generate
+          run: | 
+            php artisan key:generate
         - name: Change Directory Permissions
-          run: chmod -R 777 storage bootstrap/cache
+          run: |
+            cd frontend
+            chmod -R 777 storage bootstrap/cache
         - name: Clear Config
-          run: php artisan config:clear
+          run: |
+            cd frontend
+            php artisan config:clear
         - name: Run Migration
-          run: php artisan migrate --force
+          run: |
+            cd frontend
+            php artisan migrate --force
         
 
     ci-backend:
