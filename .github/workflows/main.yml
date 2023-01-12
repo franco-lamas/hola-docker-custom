@@ -60,10 +60,6 @@ jobs:
           run: |
             cd frontend
             php artisan config:clear
-        - name: Run Migration
-          run: |
-            cd frontend
-            php artisan migrate --force
         
 
     ci-backend:
