@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+  myapp:
+    image: docker.io/bitnami/laravel:9
+    restart: unless-stopped
+    ports:
+      - '8000:8000'
+    environment:
+      - DB_HOST=mariadb
+      - DB_PORT=3306
+      - DB_USERNAME=bn_myapp
+      - DB_DATABASE=bitnami_myapp
+    volumes:
+      - './:/app'
+
+  parachute:
+    image: imperialsys/parachute-ending-api
+    restart: unless-stopped
+    container_name: parachute-ending-api
+    volumes:
+      - ./:/app/
+    ports:
+      - "8090:5000"
