@@ -24,7 +24,9 @@ jobs:
             cd frontend
             npm install
         - name: Build frontend
-          run: npm run dev
+          run: |
+            cd frontend
+            npm run dev
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
           with:
