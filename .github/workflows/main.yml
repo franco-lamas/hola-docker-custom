@@ -144,8 +144,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY_PRODUCTION }}
           port: 22
           script: |
-            docker stop ${{ secrets.FRONTEND_CONTAINER_NAME }} && docker rm ${{ secrets.BACKEND_CONTAINER_NAME }}
-            docker run --name=${{ secrets.FRONTEND_CONTAINER_NAME }} ${{ secrets.FRONTEND_MOUNT_CONFIG }} --network=app_network -p 80:8000 --restart=always ${{ secrets.DOCKER_USER }}/front-custom:${{ github.sha }}
+            docker stop ${{ secrets.FRONTEND_CONTAINER_NAME }} && docker rm ${{ secrets.FRONTEND_CONTAINER_NAME }}
+            docker run --name=${{ secrets.FRONTEND_CONTAINER_NAME }} ${{ secrets.FRONTEND_MOUNT_CONFIG }} --network=app_network -p 80:8000 --restart=always -d ${{ secrets.DOCKER_USER }}/front-custom:${{ github.sha }}
 
     deploy-backend:
       name: Deploy Parachute Ending
@@ -164,4 +164,4 @@ jobs:
           port: 22
           script: |
             docker stop ${{ secrets.BACKEND_CONTAINER_NAME }} && docker rm ${{ secrets.BACKEND_CONTAINER_NAME }}
-            docker run --name=${{ secrets.BACKEND_CONTAINER_NAME }}  ${{ secrets.BACKEND_MOUNT_CONFIG }} --network=app_network --restart=always ${{ secrets.DOCKER_USER }}/backend-custom:${{ github.sha }}
+            docker run --name=${{ secrets.BACKEND_CONTAINER_NAME }}  ${{ secrets.BACKEND_MOUNT_CONFIG }} --network=app_network --restart=always -d ${{ secrets.DOCKER_USER }}/backend-custom:${{ github.sha }}
