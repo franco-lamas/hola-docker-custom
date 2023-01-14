@@ -4,5 +4,5 @@ FROM docker.io/bitnami/laravel:9
 
 WORKDIR /app
 
-COPY ./app .
+COPY . .
 
