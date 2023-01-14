@@ -10,6 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
+
     ci-frontend:
       runs-on: ubuntu-latest
       steps:
@@ -124,3 +125,43 @@ jobs:
           run: |
             docker push ${{ secrets.DOCKER_USER }}/backend-custom:${{ github.sha }}
             docker push ${{ secrets.DOCKER_USER }}/backend-custom:latest
+
+
+    deploy-frontend:
+      name: Deploy new image in Server
+      runs-on: ubuntu-22.04
+      needs: [cd-frontend]
+      environment: 
+        name: prod
+        url: http://deploy-ec2-prod.duckdns.org/
+      if: github.ref == 'refs/heads/main'
+      steps:
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.HOST_DNS_PRODUCTION }}
+          username: ${{ secrets.USERNAME_PRODUCTION }}
+          key: ${{ secrets.EC2_SSH_KEY_PRODUCTION }}
+          port: 22
+          script: |
+            docker stop ${{ secrets.DOCKER_USER }} && docker rm ${{ secrets.DOCKER_USER }}
+            docker run --name=${{ secrets.DOCKER_USER }} ${{ secrets.FRONTEND_MOUNT_CONFIG }} --network=app_network -p 80:8000 --restart=always ${{ secrets.DOCKER_USER }}/front-custom:${{ github.sha }}
+
+    deploy-frontend:
+      name: Deploy Parachute Ending
+      runs-on: ubuntu-22.04
+      needs: [cd-backend]
+      environment: 
+        name: prod
+      if: github.ref == 'refs/heads/main'
+      steps:
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.HOST_DNS_PRODUCTION }}
+          username: ${{ secrets.USERNAME_PRODUCTION }}
+          key: ${{ secrets.EC2_SSH_KEY_PRODUCTION }}
+          port: 22
+          script: |
+            docker stop ${{ secrets.DOCKER_USER }} && docker rm ${{ secrets.DOCKER_USER }}
+            docker run --name=${{ secrets.DOCKER_USER }} ${{ secrets.BACKEND_MOUNT_CONFIG }} --network=app_network --restart=always ${{ secrets.DOCKER_USER }}/backend-custom:${{ github.sha }}

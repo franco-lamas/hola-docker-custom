@@ -1,0 +1,44 @@
+---
+- hosts: all
+  vars:
+    server_user: ubuntu
+  tasks:
+
+    - name: Create a network
+      docker_network:
+        name: app_network
+
+    - name: Create Frontend directory
+      file:
+          path: ~/silico-frontend
+          state: directory
+
+    - name: Copy env in Frontend directory
+      ansible.builtin.copy:
+        src: ./env
+        dest: ~/silico-frontend/
+        mode: u=rw,g=r,o=r
+
+    - name: Create Parachute Ending
+      file:
+          path: ~/parachute-ending
+          state: directory
+
+    - name: Copy  env in Parachute Ending directory
+      ansible.builtin.copy:
+        src: ./env.py
+        dest: ~/parachute-ending/
+        mode: u=rw,g=r,o=r
+
+
+    - name: Deploy Frotend Container for no errors 
+      docker_container:
+        image: httpd
+        name: frontend-dev
+        state: started
+
+    - name: Deploy Parachute Ending for no errors 
+      docker_container:
+        image: httpd
+        name: parachute-ending-api
+        state: started
