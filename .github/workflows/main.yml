@@ -147,7 +147,7 @@ jobs:
             docker stop ${{ secrets.DOCKER_USER }} && docker rm ${{ secrets.DOCKER_USER }}
             docker run --name=${{ secrets.DOCKER_USER }} ${{ secrets.FRONTEND_MOUNT_CONFIG }} --network=app_network -p 80:8000 --restart=always ${{ secrets.DOCKER_USER }}/front-custom:${{ github.sha }}
 
-    deploy-frontend:
+    deploy-backend:
       name: Deploy Parachute Ending
       runs-on: ubuntu-22.04
       needs: [cd-backend]
